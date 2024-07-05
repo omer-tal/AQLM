@@ -293,6 +293,11 @@ def quantize_aq(model: PreTrainedModel, data: Sequence, val_data: Optional[Seque
 
             print("PREPARING TO FINETUNE")
             print(layer)
+            if args.save and not loaded_layer:
+                os.makedirs(args.save, exist_ok=True)
+                layer_save_path = os.path.join(args.save, f"{layer_index}_prefintune.pth")
+                print(f"Saving layer {layer_index}... to {layer_save_path}")
+                torch.save(layer, layer_save_path)
             layer = layer.to(dtype=torch.float32)
             with using_tf32(enabled=True):
                 layer = finetune_groupwise(
