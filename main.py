@@ -1,5 +1,6 @@
 import os
 import time
+import pickle
 from argparse import Namespace
 from itertools import chain
 from typing import Any, Dict, Iterable, Optional, Sequence, Tuple
@@ -295,9 +296,10 @@ def quantize_aq(model: PreTrainedModel, data: Sequence, val_data: Optional[Seque
             print(layer)
             if args.save and not loaded_layer:
                 os.makedirs(args.save, exist_ok=True)
-                layer_save_path = os.path.join(args.save, f"{layer_index}_prefintune.pth")
+                layer_save_path = os.path.join(args.save, f"{layer_index}_prefintune.pkl")
                 print(f"Saving layer {layer_index}... to {layer_save_path}")
-                torch.save(layer, layer_save_path)
+                with open(layer_save_path, 'wb') as f:
+                    pickle.dump(layer, f)
             layer = layer.to(dtype=torch.float32)
             with using_tf32(enabled=True):
                 layer = finetune_groupwise(
