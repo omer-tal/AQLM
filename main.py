@@ -392,7 +392,7 @@ def perplexity_eval(model: PreTrainedModel, testenc: torch.LongTensor, args: Nam
         forward_args[k] = v.to(device) if isinstance(v, torch.Tensor) else v
 
     layers = get_layers(model)
-    for i in trange(len(layers), desc="processing eval data by layer"):
+    for i in range(len(layers)):
         layer = layers[i].to(device)
         if len(args.devices) == 1:
             assert len(inps) == len(outs) == 1
