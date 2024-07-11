@@ -11,7 +11,7 @@ from tqdm import trange
 from tqdm.auto import trange
 from transformers import PreTrainedModel
 
-from aq_engine import AQEngine
+from aq_engine import AQEnginef
 from src.aq import QuantizedLinear
 from src.datautils import get_loaders
 from src.finetune import finetune_groupwise
@@ -263,7 +263,7 @@ def quantize_aq(model: PreTrainedModel, data: Sequence, val_data: Optional[Seque
                     else:
                         args.num_codebooks = num_codebooks
                     print(sublayer_name.lower(), " mixtral num codebooks", args.num_codebooks)
-                quantized_weight = aq_handlers[sublayer_name].quantize(args=args, verbose=True)
+                quantized_weight = aq_handlers[sublayer_name].quantize(args=args, verbose=False)
 
                 with torch.no_grad():
                     assert aq_handlers[sublayer_name].layer.weight in set(
