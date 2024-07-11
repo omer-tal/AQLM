@@ -467,7 +467,7 @@ def init_aq_engines(
                 setattr(module, child_name, _LayerWrapperThatAccumulatesXTX(child, wrapped_layer_to_hander[child]))
 
     # compute output activations and accumulate XTX
-    for j in trange(len(inps_tensor), desc="calc outs before quantization", leave=False):
+    for j in range(len(inps_tensor)):
         outs_tensor[j].copy_(
             layer(inps_tensor[j].to(device).unsqueeze(0), **forward_args)[0].view_as(outs_tensor[j]), non_blocking=True
         )
@@ -545,7 +545,7 @@ def update_outs(
     """
     device = torch.device(f"cuda:{torch.cuda.current_device()}" if torch.cuda.is_available() else "cpu")
     out_losses = []
-    for j in trange(len(inps_tensor), desc="calc outs after quantization", leave=False):
+    for j in range(len(inps_tensor)):
         outs_batch = layer(inps_tensor[j].to(device).unsqueeze(0), **forward_args)[0]
         if compute_mse:
             batch_size = outs_batch.shape[0]
